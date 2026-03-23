@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration | Ajouter une Épreuve</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #1c9e29; --secondary: #191970; --accent: #c41e3a;
+            --light: #f4f7f6; --white: #ffffff; --border: #dce0df;
+        }
+
+        body { font-family: 'Poppins', sans-serif; background-color: var(--light); margin: 0; padding: 0; }
+        
+        header { background: var(--secondary); color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; }
+        .btn-back { color: white; text-decoration: none; font-size: 0.9rem; border: 1px solid white; padding: 5px 15px; border-radius: 20px; }
+
+        .upload-card { 
+            max-width: 700px; margin: 40px auto; background: var(--white); 
+            padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+        }
+
+        h2 { color: var(--secondary); margin-bottom: 25px; text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 10px; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .full-width { grid-column: span 2; }
+
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #444; font-size: 0.9rem; }
+        
+        select, input { 
+            width: 100%; padding: 12px; border: 1.5px solid var(--border); 
+            border-radius: 8px; outline: none; transition: 0.3s; 
+        }
+        
+        select:focus, input:focus { border-color: var(--primary); }
+
+        .file-input-wrapper {
+            background: #f9f9f9; border: 2px dashed var(--border);
+            padding: 20px; text-align: center; border-radius: 10px; margin-top: 10px;
+        }
+
+        .btn-submit { 
+            width: 100%; background: var(--primary); color: white; border: none; 
+            padding: 15px; border-radius: 8px; font-weight: 700; font-size: 1rem;
+            cursor: pointer; margin-top: 25px; transition: 0.3s;
+        }
+        .btn-submit:hover { background: #158020; transform: translateY(-2px); }
+        .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* Barre de Progression */
+        .progress-container { display: none; margin-top: 20px; background: #eee; border-radius: 10px; overflow: hidden; }
+        .progress-bar { width: 0%; height: 10px; background: var(--primary); transition: width 0.3s; }
+        
+        #statusMessage { text-align: center; margin-top: 10px; font-weight: 600; font-size: 0.9rem; }
+        .success { color: var(--primary); }
+        .error { color: var(--accent); }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><strong>AERZA</strong> Admin</div>
+        <a href="index.html" class="btn-back"><i class="fas fa-arrow-left"></i> Retour au site</a>
+    </header>
+
+    <div class="upload-card">
+        <h2><i class="fas fa-cloud-upload-alt"></i> Publier une Épreuve</h2>
+        
+        <form id="uploadForm">
+            <div class="form-grid">
+                <div>
+                    <label>École d'origine</label>
+                    <select id="ecole" required onchange="updateFilières()">
+                        <option value="">Sélectionner...</option>
+                        <option value="ENSTP">ENSTP</option>
+                        <option value="ENSGEP">ENSGEP</option>
+                        <option value="ENSGMM">ENSGMM</option>
+                        <option value="INSPEI">INSPEI</option>
+                        <option value="INSTI">INSTI</option>
+                        <option value="ENSET">ENSET</option>
+                        <option value="ENS">ENS</option>
+                        <option value="FAST">FAST</option>
+                        <option value="ENSBBA">ENSBBA</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Filière</label>
+                    <select id="filiere" required>
+                        <option value="">Choisir l'école d'abord</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Niveau (L1, L2...)</label>
+                    <select id="niveau" required>
+                        <option value="L1">Licence 1</option>
+                        <option value="L2">Licence 2</option>
+                        <option value="L3">Licence 3</option>
+                        <option value="M1">Master 1</option>
+                        <option value="M2">Master 2</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Année de l'épreuve</label>
+                    <input type="number" id="annee" placeholder="Ex: 2023" required>
+                </div>
+
+                <div class="full-width">
+                    <label>Nom de la Matière</label>
+                    <input type="text" id="matiere" placeholder="Ex: Résistance des Matériaux" required>
+                </div>
+
+                <div class="full-width">
+                    <label>Fichier de l'Épreuve (PDF uniquement)</label>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="fileEpreuve" accept="application/pdf" required>
+                    </div>
+                </div>
+
+                <div class="full-width">
+                    <label>Fichier du Corrigé (Optionnel)</label>
+                    <div class="file-input-wrapper" style="border-color: #eee;">
+                        <input type="file" id="fileCorrige" accept="application/pdf">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-submit">PUBLIER SUR LA PLATEFORME</button>
+        </form>
+
+        <div class="progress-container" id="progBox">
+            <div class="progress-bar" id="pBar"></div>
+        </div>
+        <div id="statusMessage"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4NS-Lb0LLn0XXkwtbEKC0IQPtUeof9cs",
+            authDomain: "univzou-site.firebaseapp.com",
+            projectId: "univzou-site",
+            storageBucket: "univzou-site.firebasestorage.app",
+            messagingSenderId: "457202134730",
+            appId: "1:457202134730:web:d8073a87f7a01be4044e33"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        // DATA FILIERES
+        const DATA = {
+            "ENSTP": ["Génie Civil", "Travaux Publics", "Hydraulique / Eau", "Géotechnique"],
+            "ENSGEP": ["Equipements motorisés", "Froid et climatisation", "Génie des procédés"],
+            "ENSGMM": ["Mathématiques appliquées", "Modélisation", "Statistiques / Data"],
+            "INSPEI": ["Classes préparatoires"],
+            "INSTI": ["Génie industriel", "Maintenance industrielle", "Électrotechnique"],
+            "ENSET": ["Sciences techniques industrielles", "Sciences administratives", "Sciences agricoles", "Sciences biologiques"],
+            "ENS": ["MI (Maths-Info)", "PCT (Physique-Chimie)", "SVT"],
+            "FAST": ["Mathématiques", "Physique", "Chimie", "Biologie"],
+            "ENSBBA": ["Biosciences", "Biotechnologies", "Agroalimentaire"]
+        };
+
+        window.updateFilières = () => {
+            const ecole = document.getElementById('ecole').value;
+            const filSelect = document.getElementById('filiere');
+            filSelect.innerHTML = '<option value="">Choisir...</option>';
+            if(DATA[ecole]) {
+                DATA[ecole].forEach(f => {
+                    let o = document.createElement('option'); o.value = f; o.text = f; filSelect.add(o);
+                });
+            }
+        };
+
+        // GESTION UPLOAD
+        const form = document.getElementById('uploadForm');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            const msg = document.getElementById('statusMessage');
+            const pBox = document.getElementById('progBox');
+            const pBar = document.getElementById('pBar');
+
+            const file = document.getElementById('fileEpreuve').files[0];
+            const fileCorrige = document.getElementById('fileCorrige').files[0];
+
+            if(!file) return;
+
+            btn.disabled = true;
+            pBox.style.display = 'block';
+            msg.innerHTML = "Téléchargement de l'épreuve...";
+
+            try {
+                // 1. Upload Épreuve
+                const storageRef = ref(storage, `epreuves/${Date.now()}_${file.name}`);
+                const uploadTask = uploadBytesResumable(storageRef, file);
+
+                uploadTask.on('state_changed', 
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        pBar.style.width = progress + '%';
+                    }, 
+                    (error) => { throw error }, 
+                    async () => {
+                        const epreuveUrl = await getDownloadURL(uploadTask.snapshot.ref);
+                        let corrigeUrl = "";
+
+                        // 2. Upload Corrigé (si présent)
+                        if(fileCorrige) {
+                            msg.innerHTML = "Téléchargement du corrigé...";
+                            const cRef = ref(storage, `corriges/${Date.now()}_${fileCorrige.name}`);
+                            const cTask = await uploadBytesResumable(cRef, fileCorrige);
+                            corrigeUrl = await getDownloadURL(cTask.ref);
+                        }
+
+                        // 3. Enregistrement Firestore
+                        await addDoc(collection(db, "epreuves"), {
+                            ecole: document.getElementById('ecole').value,
+                            filiere: document.getElementById('filiere').value,
+                            niveau: document.getElementById('niveau').value,
+                            annee: document.getElementById('annee').value,
+                            matiere: document.getElementById('matiere').value,
+                            epreuve_url: epreuveUrl,
+                            corrige_url: corrigeUrl,
+                            date_ajout: serverTimestamp()
+                        });
+
+                        msg.className = "success";
+                        msg.innerHTML = "✅ Succès ! L'épreuve est en ligne.";
+                        form.reset();
+                        btn.disabled = false;
+                        pBox.style.display = 'none';
+                    }
+                );
+            } catch (err) {
+                msg.className = "error";
+                msg.innerHTML = "❌ Erreur : " + err.message;
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
