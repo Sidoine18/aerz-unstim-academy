@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AEZ UNSTIM Academy | Plateforme Académique Officielle</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #1c9e29; --secondary: #191970; --accent: #c41e3a;
+            --light: #f8f9fa; --white: #ffffff; --dark: #1a1d21;
+            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', sans-serif; color: var(--dark); line-height: 1.7; scroll-behavior: smooth; background-color: var(--white); overflow-x: hidden; }
+        .container { width: 90%; max-width: 1200px; margin: 0 auto; }
+
+        /* HEADER & NAV */
+        header { background: rgba(255, 255, 255, 0.95); padding: 15px 0; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px); border-bottom: 1px solid #eee; }
+        .nav-flex { display: flex; justify-content: space-between; align-items: center; }
+        .logo-area { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-img { height: 50px; width: 50px; object-fit: contain; }
+        .brand-name { font-weight: 800; font-size: 1.4rem; color: var(--secondary); letter-spacing: -0.5px; }
+        .highlight { color: var(--primary); }
+        nav ul { display: flex; list-style: none; gap: 30px; align-items: center; }
+        nav a { text-decoration: none; color: var(--secondary); font-weight: 500; font-size: 0.95rem; transition: var(--transition); }
+        nav a:hover { color: var(--primary); }
+
+        /* BUTTONS */
+        .btn-primary {
+            background: var(--primary); color: var(--white); padding: 16px 35px; border-radius: 12px;
+            text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 10px;
+            transition: var(--transition); border: none; box-shadow: 0 10px 20px rgba(28, 158, 41, 0.2); cursor: pointer;
+        }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(28, 158, 41, 0.3); background: #158020; }
+
+        /* HERO SECTION */
+        .hero { padding: 80px 0 60px; background: radial-gradient(circle at top right, #f0fdf4, #ffffff); }
+        .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+        .hero-content h1 { font-size: 3.5rem; line-height: 1.1; color: var(--secondary); margin-bottom: 25px; font-weight: 800; }
+        .hero-content p { font-size: 1.2rem; color: #4b5563; margin-bottom: 35px; border-left: 4px solid var(--primary); padding-left: 20px; }
+
+        /* SECTION SCHOOLS (NOUVEAU) */
+        .schools { padding: 60px 0; background: var(--white); border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
+        .school-slider { display: flex; gap: 40px; justify-content: center; align-items: center; flex-wrap: wrap; opacity: 0.6; }
+        .school-logo { height: 60px; filter: grayscale(100%); transition: 0.3s; }
+        .school-logo:hover { filter: grayscale(0%); opacity: 1; transform: scale(1.1); }
+
+        /* HOW IT WORKS */
+        .how-it-works { padding: 100px 0; background: #fafafa; }
+        .section-header { text-align: center; max-width: 700px; margin: 0 auto 60px; }
+        .section-header h2 { font-size: 2.5rem; color: var(--secondary); margin-bottom: 15px; font-weight: 800; }
+        .steps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
+        .step-card { background: var(--white); padding: 40px; border-radius: 20px; transition: var(--transition); border: 1px solid #f0f0f0; position: relative; }
+        .step-card:hover { transform: translateY(-10px); box-shadow: var(--shadow); border-color: var(--primary); }
+        .step-nb { position: absolute; top: 20px; right: 30px; font-size: 4rem; font-weight: 900; color: #f3f4f6; z-index: 1; }
+        .step-card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 25px; position: relative; z-index: 2; }
+        .step-card h3 { font-size: 1.3rem; margin-bottom: 15px; color: var(--secondary); position: relative; z-index: 2; }
+        .step-card p { color: #6b7280; font-size: 0.95rem; position: relative; z-index: 2; }
+
+        /* SECTION TÉMOIGNAGES (NOUVEAU) */
+        .testimonials { padding: 100px 0; background: var(--white); }
+        .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 50px; }
+        .testi-card { background: var(--light); padding: 30px; border-radius: 15px; border: 1px solid #eee; position: relative; transition: 0.3s; }
+        .testi-card:hover { border-color: var(--primary); background: var(--white); box-shadow: var(--shadow); }
+        .testi-card i.fa-quote-left { position: absolute; top: 20px; left: 20px; font-size: 1.5rem; color: var(--primary); opacity: 0.2; }
+        .testi-msg { color: #4b5563; font-style: italic; font-size: 0.95rem; margin-bottom: 20px; margin-top: 10px; min-height: 80px; }
+        .testi-user { display: flex; align-items: center; gap: 12px; border-top: 1px solid #eee; padding-top: 15px; }
+        .user-avatar { width: 40px; height: 40px; background: var(--secondary); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; text-transform: uppercase; }
+        .user-info h4 { font-size: 0.9rem; color: var(--secondary); }
+        .user-info span { font-size: 0.75rem; color: var(--primary); font-weight: 600; }
+        
+        .review-form-container { max-width: 600px; margin: 0 auto; background: var(--light); padding: 40px; border-radius: 20px; border: 1px solid #eee; text-align: center;}
+        .review-form-container h3 { margin-bottom: 20px; color: var(--secondary); }
+        .star-rating { font-size: 1.5rem; color: #ddd; cursor: pointer; margin-bottom: 15px; display: inline-flex; gap: 5px; }
+        .star-rating i:hover, .star-rating i.active { color: #ffc107; }
+
+        /* CONTACT SECTION (Inchangée) */
+        .contact { padding: 100px 0; background: #fafafa; }
+        .contact-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 0; background: var(--secondary); border-radius: 30px; overflow: hidden; box-shadow: var(--shadow); }
+        .contact-info { padding: 60px; background: linear-gradient(135deg, var(--secondary) 0%, #0d0d4d 100%); color: var(--white); }
+        .contact-info h2 { font-size: 2rem; margin-bottom: 20px; font-weight: 800; }
+        .contact-list { list-style: none; margin-top: 30px; }
+        .contact-list li { margin-bottom: 20px; display: flex; align-items: center; gap: 15px; opacity: 0.9; }
+        .contact-list i { color: var(--primary); font-size: 1.2rem; }
+        .contact-form { padding: 60px; background: var(--white); }
+        .contact-form input, .contact-form textarea, .review-form-container input, .review-form-container textarea { width: 100%; padding: 15px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #e5e7eb; outline: none; font-family: inherit; transition: 0.3s; }
+        .contact-form input:focus, .contact-form textarea:focus, .review-form-container input:focus, .review-form-container textarea:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(28, 158, 41, 0.1); }
+        #formStatus, #reviewStatus { margin-top: 15px; font-size: 0.9rem; font-weight: 600; }
+        .success-text { color: #1c9e29; }
+        .error-text { color: #ef4444; }
+
+        /* FOOTER */
+        footer { text-align: center; padding: 50px 0; background: var(--white); border-top: 1px solid #eee; color: #9ca3af; }
+
+        /* RESPONSIVE */
+        @media (max-width: 992px) { .hero-grid { grid-template-columns: 1fr; text-align: center; } .hero-content p { border-left: none; padding-left: 0; } .contact-container { grid-template-columns: 1fr; } .hero-image { display: none; } }
+        @media (max-width: 768px) { nav ul { display: none; } .hero-content h1 { font-size: 2.5rem; } .section-header h2 { font-size: 2rem; } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container nav-flex">
+            <a href="index.html" class="logo-area">
+                <img src="images/logo_aerza.png" alt="Logo AERZA" class="logo-img">
+                <span class="brand-name">AERZA<span class="highlight"> Academy</span></span>
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#home">Accueil</a></li>
+                    <li><a href="#how">Guide</a></li>
+                    <li><a href="#testimonials">Avis</a></li>
+                    <li><a href="#contact">Support</a></li>
+                    <li><a href="dashboard.html" class="btn-primary" style="padding: 10px 25px; font-size: 0.85rem; border-radius: 8px;">Bibliothèque</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero" id="home">
+        <div class="container hero-grid">
+            <div class="hero-content">
+                <h1>L'excellence académique <br><span class="highlight">à l'UNSTIM.</span></h1>
+                <p>La première bibliothèque numérique centralisée pour les étudiants de l'UNSTIM. Accédez instantanément à des centaines d'épreuves et corrigés certifiés.</p>
+                <a href="dashboard.html" class="btn-primary">Explorer les ressources <i class="fas fa-arrow-right"></i></a>
+            </div>
+            <div class="hero-image" style="text-align: right;">
+                <img src="https://img.freepik.com/free-vector/digital-library-concept-illustration_114360-8452.jpg" alt="Illustration" style="width: 100%; max-width: 500px;">
+            </div>
+        </div>
+    </section>
+    
+    
+    <section class="schools">
+           <div class="container school-slider">
+            <img src="images/logo_enstp.png" alt="ENSTP" class="school-logo" title="ENSTP Abomey">
+            <img src="images/logo_insti.png" alt="INSTI" class="school-logo" title="INSTI Lokossa">
+            <img src="images/logo_enset.png" alt="ENSET" class="school-logo" title="ENSET Lokossa">
+            <img src="images/logo_ens.png" alt="ENS" class="school-logo" title="ENS Natitingou">
+            <img src="images/logo_fast.png" alt="FAST" class="school-logo" title="FAST Natitingou">
+            <img src="images/logo_inspei.png" alt="INSPEI" class="school-logo" title="INSPEI Abomey">
+            <img src="images/logo_ensgmm.png" alt="ENSGMM" class="school-logo" title="ENSGMM Abomey">
+            <img src="images/logo_ensgep.png" alt="ENSGEP" class="school-logo" title="ENSGEP Abomey">
+            <img src="images/logo_ensbba.png" alt="ENSBBA" class="school-logo" title="ENSBBA Dassa">
+            </div>
+    </section>    
+    
+    <section class="how-it-works" id="how">
+        <div class="container">
+            <div class="section-header">
+                <h2>Comment procéder ?</h2>
+                <p>Une interface simplifiée pour vous permettre de vous concentrer sur l'essentiel : vos révisions.</p>
+            </div>
+            <div class="steps-grid">
+                <div class="step-card"><span class="step-nb">01</span><i class="fas fa-search"></i><h3>Recherche Ciblée</h3><p>Utilisez nos filtres intelligents pour trier par école, filière et niveau.</p></div>
+                <div class="step-card"><span class="step-nb">02</span><i class="fas fa-file-pdf"></i><h3>Consultation Directe</h3><p>Visualisez les épreuves et corrigés officiels directement en ligne.</p></div>
+                <div class="step-card"><span class="step-nb">03</span><i class="fas fa-graduation-cap"></i><h3>Préparation Optimale</h3><p>Téléchargez les ressources pour étudier hors-ligne.</p></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header">
+                <h2>L'avis de vos pairs</h2>
+                <p>Découvrez comment AERZA Academy transforme la préparation des étudiants de l'UNSTIM.</p>
+            </div>
+            
+            <div class="testi-grid" id="testiContainer">
+                <div style="grid-column: 1/-1; text-align: center; color: #9ca3af;"><i class="fas fa-circle-notch fa-spin"></i> Chargement des avis...</div>
+            </div>
+
+            <div class="review-form-container">
+                <h3>Partagez votre expérience</h3>
+                <p style="font-size: 0.85rem; color: #6b7280; margin-bottom: 15px;">Votre avis sera publié après validation par l'équipe.</p>
+                <div class="star-rating" id="starRating">
+                    <i class="fas fa-star" data-rating="1"></i>
+                    <i class="fas fa-star" data-rating="2"></i>
+                    <i class="fas fa-star" data-rating="3"></i>
+                    <i class="fas fa-star" data-rating="4"></i>
+                    <i class="fas fa-star" data-rating="5"></i>
+                </div>
+                <form id="reviewForm">
+                    <input type="text" id="reviewName" placeholder="Votre Nom (ex: Jean D. / ENSTP)" required maxlength="40">
+                    <textarea id="reviewMsg" placeholder="Votre témoignage (max 150 caractères)..." rows="3" required maxlength="150"></textarea>
+                    <button type="submit" id="submitReviewBtn" class="btn-primary" style="width: 100%; justify-content: center; font-size: 0.9rem; padding: 12px;">Soumettre mon avis</button>
+                    <div id="reviewStatus"></div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h2>Support & Collaboration</h2>
+                    <p>Une question ou une contribution ? Notre équipe vous répond.</p>
+                    <ul class="contact-list">
+                        <li><i class="fab fa-whatsapp"></i> +229 01 95 49 83 59</li>
+                        <li><i class="fab fa-whatsapp"></i> +229 01 68 87 08 37</li>
+                        <li><i class="fas fa-envelope"></i> aerzaunstim@gmail.com</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Campus National, Abomey</li>
+                    </ul>
+                </div>
+                <div class="contact-form">
+                    <form id="secureContactForm">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <input type="text" id="userName" placeholder="Nom complet" required maxlength="50">
+                            <input type="email" id="userEmail" placeholder="Email institutionnel" required>
+                        </div>
+                        <textarea id="userMessage" placeholder="Comment pouvons-nous vous aider ?" rows="5" required maxlength="500"></textarea>
+                        <button type="submit" id="submitBtn" class="btn-primary" style="width: 100%; justify-content: center;">Envoyer ma demande</button>
+                        <div id="formStatus"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 <strong>AERZA UNSTIM Academy</strong>. Tous droits réservés.</p>
+            <p style="font-size: 0.75rem; margin-top: 10px;">Propulsé par l'AERZA pour l'excellence académique.</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, query, where, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4NS-Lb0LLn0XXkwtbEKC0IQPtUeof9cs",
+            authDomain: "univzou-site.firebaseapp.com",
+            projectId: "univzou-site",
+            storageBucket: "univzou-site.firebasestorage.app",
+            messagingSenderId: "457202134730",
+            appId: "1:457202134730:web:d8073a87f7a01be4044e33"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // -- UTILITAIRES SÉCURITÉ --
+        function sanitize(text) {
+            const temp = document.createElement('div');
+            temp.textContent = text;
+            return temp.innerHTML;
+        }
+
+        // --- PARTIE 1 : AFFICHAGE DYNAMIQUE DES AVIS (Nouveau) ---
+        async function loadTestimonials() {
+            const container = document.getElementById('testiContainer');
+            try {
+                // Requête : Prendre les 3 derniers témoignages dont le statut est "valide"
+                const q = query(
+                    collection(db, "temoignages"), 
+                    where("statut", "==", "valide"), 
+                    orderBy("date", "desc"), 
+                    limit(6)
+                );
+                const snap = await getDocs(q);
+                
+                container.innerHTML = ""; // Vider le spinner
+
+                if (snap.empty) {
+                    container.innerHTML = "<div style='grid-column:1/-1; text-align:center; color:#9ca3af;'>Aucun avis publié pour le moment. Soyez le premier !</div>";
+                    return;
+                }
+
+                snap.forEach((doc) => {
+                    const data = doc.data();
+                    const initials = data.nom.substring(0, 2);
+                    
+                    // Génération des étoiles
+                    let starsHtml = "";
+                    for(let i=0; i<5; i++) {
+                        starsHtml += `<i class="fas fa-star" style="color: ${i < data.note ? '#ffc107' : '#ddd'}"></i>`;
+                    }
+
+                    container.innerHTML += `
+                        <div class="testi-card">
+                            <i class="fas fa-quote-left"></i>
+                            <div style="color: #ffc107; font-size: 0.8rem; margin-bottom: 10px;">${starsHtml}</div>
+                            <p class="testi-msg">${data.message}</p>
+                            <div class="testi-user">
+                                <div class="user-avatar">${initials}</div>
+                                <div class="user-info">
+                                    <h4>${data.nom}</h4>
+                                    <span>Étudiant UNSTIM</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            } catch (error) {
+                console.error("Erreur chargement avis:", error);
+                container.innerHTML = "<div style='grid-column:1/-1; text-align:center; color:red;'>Erreur technique lors du chargement des avis.</div>";
+            }
+        }
+        // Charger au lancement de la page
+        loadTestimonials();
+
+
+        // --- PARTIE 2 : SOUMISSION D'UN NOUVEL AVIS (Nouveau) ---
+        let currentRating = 0;
+        const stars = document.querySelectorAll('#starRating i');
+        const reviewForm = document.getElementById('reviewForm');
+        const reviewStatus = document.getElementById('reviewStatus');
+        const submitReviewBtn = document.getElementById('submitReviewBtn');
+
+        // Gestion du clic sur les étoiles
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                currentRating = star.getAttribute('data-rating');
+                stars.forEach(s => s.classList.remove('active'));
+                for(let i=0; i<currentRating; i++) {
+                    stars[i].classList.add('active');
+                }
+            });
+        });
+
+        reviewForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = sanitize(document.getElementById('reviewName').value.trim());
+            const message = sanitize(document.getElementById('reviewMsg').value.trim());
+
+            if(currentRating === 0 || name.length < 3 || message.length < 10) {
+                reviewStatus.innerHTML = "<span class='error-text'>❌ Veuillez donner une note, votre nom et un message de min. 10 caractères.</span>";
+                return;
+            }
+
+            submitReviewBtn.disabled = true;
+            submitReviewBtn.innerText = "Envoi en cours...";
+
+            try {
+                // IMPORTANT : On envoie avec statut "en_attente" pour modération
+                await addDoc(collection(db, "temoignages"), {
+                    nom: name,
+                    message: message,
+                    note: parseInt(currentRating),
+                    statut: "en_attente", // <--- Sécurité modération
+                    date: serverTimestamp()
+                });
+
+                reviewStatus.innerHTML = "<span class='success-text'>✅ Merci ! Votre avis est en cours de modération avant publication.</span>";
+                reviewForm.reset();
+                currentRating = 0;
+                stars.forEach(s => s.classList.remove('active'));
+            } catch (error) {
+                console.error("Erreur soumission avis:", error);
+                reviewStatus.innerHTML = "<span class='error-text'>❌ Erreur technique. Réessayez plus tard.</span>";
+            } finally {
+                submitReviewBtn.disabled = false;
+                submitReviewBtn.innerText = "Soumettre mon avis";
+            }
+        });
+
+
+        // --- PARTIE 3 : FORMULAIRE CONTACT (Inchangé) ---
+        const contactForm = document.getElementById('secureContactForm');
+        const status = document.getElementById('formStatus');
+        const btn = document.getElementById('submitBtn');
+
+        contactForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = sanitize(document.getElementById('userName').value.trim());
+            const email = sanitize(document.getElementById('userEmail').value.trim());
+            const message = sanitize(document.getElementById('userMessage').value.trim());
+
+            if(name.length < 2 || message.length < 5) {
+                status.innerHTML = "<span class='error-text'>Données invalides.</span>";
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerText = "Traitement...";
+
+            try {
+                await addDoc(collection(db, "messages"), {
+                    nom: name, email: email, message: message, date: serverTimestamp()
+                });
+                status.innerHTML = "<span class='success-text'>✅ Message envoyé !</span>";
+                contactForm.reset();
+            } catch (error) {
+                status.innerHTML = "<span class='error-text'>❌ Échec de l'envoi.</span>";
+            } finally {
+                btn.disabled = false;
+                btn.innerText = "Envoyer ma demande";
+            }
+        });
+    </script>
+</body>
+</html>
