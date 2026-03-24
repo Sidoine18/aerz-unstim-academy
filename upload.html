@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration Pro Max | AEZ Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #1c9e29; --secondary: #191970; --accent: #c41e3a;
+            --light: #f4f7f6; --white: #ffffff; --border: #dce0df;
+        }
+
+        body { font-family: 'Poppins', sans-serif; background-color: var(--light); margin: 0; padding: 0; }
+        header { background: var(--secondary); color: white; padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .btn-back { color: white; text-decoration: none; font-size: 0.85rem; border: 1px solid rgba(255,255,255,0.4); padding: 8px 18px; border-radius: 20px; transition: 0.3s; }
+        .btn-back:hover { background: white; color: var(--secondary); }
+
+        .upload-card { max-width: 800px; margin: 40px auto; background: var(--white); padding: 35px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1); }
+        h2 { color: var(--secondary); margin-bottom: 25px; text-align: center; font-weight: 700; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .full-width { grid-column: span 2; }
+
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #555; font-size: 0.9rem; }
+        select, input { width: 100%; padding: 12px; border: 2px solid var(--border); border-radius: 10px; outline: none; transition: 0.3s; font-family: inherit; }
+        select:focus, input:focus { border-color: var(--primary); }
+
+        .file-box { background: #f8f9fa; border: 2px dashed #cbd5e0; padding: 20px; text-align: center; border-radius: 12px; transition: 0.3s; position: relative;}
+        .file-box:hover { border-color: var(--primary); background: #f0f9f1; }
+
+        .btn-submit { 
+            width: 100%; background: var(--primary); color: white; border: none; 
+            padding: 16px; border-radius: 12px; font-weight: 700; font-size: 1.1rem;
+            cursor: pointer; margin-top: 30px; box-shadow: 0 5px 15px rgba(28, 158, 41, 0.3); transition: 0.3s;
+        }
+        .btn-submit:hover { background: #158020; transform: translateY(-2px); }
+        .btn-submit:disabled { background: #cbd5e0; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        .progress-container { display: none; margin-top: 25px; background: #edf2f7; border-radius: 10px; height: 12px; overflow: hidden; }
+        .progress-bar { width: 0%; height: 100%; background: var(--primary); transition: width 0.4s; }
+        
+        #statusMessage { text-align: center; margin-top: 15px; font-weight: 600; min-height: 1.2rem; }
+        .success { color: var(--primary); }
+        .error { color: var(--accent); }
+
+        #autreFiliereContainer { display: none; margin-top: 10px; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo"><strong>AERZA</strong> | Admin Pro Max</div>
+        <a href="dashboard.html" class="btn-back"><i class="fas fa-th"></i> Voir la Bibliothèque</a>
+    </header>
+
+    <div class="upload-card">
+        <h2><i class="fas fa-cloud-upload-alt"></i> Publier une ressource</h2>
+        
+        <form id="uploadForm">
+            <div class="form-grid">
+                <div>
+                    <label>École</label>
+                    <select id="ecole" required onchange="logic_updateFilières()">
+                        <option value="">-- Sélectionner l'école --</option>
+                        <option value="ENSTP">ENSTP (Abomey)</option>
+                        <option value="ENSGEP">ENSGEP (Abomey)</option>
+                        <option value="ENSGMM">ENSGMM (Abomey)</option>
+                        <option value="INSPEI">INSPEI (Abomey)</option>
+                        <option value="INSTI">INSTI (Lokossa)</option>
+                        <option value="ENSET">ENSET (Lokossa)</option>
+                        <option value="ENS">ENS (Natitingou)</option>
+                        <option value="FAST">FAST (Natitingou)</option>
+                        <option value="ENSBBA">ENSBBA (Dassa)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Filière</label>
+                    <select id="filiere" required onchange="logic_checkAutre()">
+                        <option value="">Choisir l'école...</option>
+                    </select>
+                    <div id="autreFiliereContainer">
+                        <input type="text" id="filiereAutre" placeholder="Saisir la filière manuellement">
+                    </div>
+                </div>
+
+                <div>
+                    <label>Niveau</label>
+                    <select id="niveau" required>
+                        <option value="L1">Licence 1</option>
+                        <option value="L2">Licence 2</option>
+                        <option value="L3">Licence 3</option>
+                        <option value="Ing1">Ingénieur 1</option>
+                        <option value="Ing2">Ingénieur 2</option>
+                        <option value="Ing3">Ingénieur 3</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Année Académique</label>
+                    <input type="number" id="annee" placeholder="Ex: 2024" required min="2000" max="2100">
+                </div>
+
+                <div class="full-width">
+                    <label>Intitulé de la Matière / Épreuve</label>
+                    <input type="text" id="matiere" placeholder="Ex: Analyse Mathématique 1" required>
+                </div>
+
+                <div class="full-width">
+                    <label>Fichier Épreuve (PDF)</label>
+                    <div class="file-box">
+                        <input type="file" id="fileEpreuve" accept=".pdf" required>
+                    </div>
+                </div>
+
+                <div class="full-width">
+                    <label>Fichier Corrigé (Optionnel)</label>
+                    <div class="file-box" style="border-style: solid; border-width: 1px;">
+                        <input type="file" id="fileCorrige" accept=".pdf">
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-submit">LANCER LA PUBLICATION</button>
+        </form>
+
+        <div class="progress-container" id="progBox">
+            <div class="progress-bar" id="pBar"></div>
+        </div>
+        <div id="statusMessage"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // CONFIGURATION FIREBASE
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4NS-Lb0LLn0XXkwtbEKC0IQPtUeof9cs",
+            authDomain: "univzou-site.firebaseapp.com",
+            projectId: "univzou-site"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // CONFIGURATION CLOUDINARY PRO MAX
+        const CLOUD_NAME = "dp7bqdguu";
+        const UPLOAD_PRESET = "preset_unstim";
+
+        const DATA = {
+            "ENSTP": ["Génie Civil", "Travaux Publics", "Hydraulique / Eau", "Géotechnique"],
+            "ENSGEP": ["Génie énergétique et Procédés", "Froid et climatisation", "Equipements motorisés"],
+            "ENSGMM": ["Mathématiques appliquées", "Modélisation", "Statistiques / Data"],
+            "INSPEI": ["Classes préparatoires"],
+            "INSTI": ["Génie industriel", "Maintenance industrielle", "Électrotechnique"],
+            "ENSET": ["Sciences techniques industrielles", "Sciences administratives", "Sciences agricoles", "Sciences biologiques"],
+            "ENS": ["MI (Maths-Info)", "PCT (Physique-Chimie)", "SVT"],
+            "FAST": ["Mathématiques", "Physique", "Chimie", "Biologie"],
+            "ENSBBA": ["Biosciences", "Biotechnologies", "Agroalimentaire"]
+        };
+
+        window.logic_updateFilières = () => {
+            const ecole = document.getElementById('ecole').value;
+            const filSelect = document.getElementById('filiere');
+            filSelect.innerHTML = '<option value="">-- Choisir --</option>';
+            
+            if(DATA[ecole]) {
+                DATA[ecole].forEach(f => {
+                    let o = document.createElement('option'); o.value = f; o.text = f; filSelect.add(o);
+                });
+            }
+            let optAutre = document.createElement('option');
+            optAutre.value = "AUTRE"; optAutre.text = "-- Autre filière --";
+            filSelect.add(optAutre);
+            window.logic_checkAutre();
+        };
+
+        window.logic_checkAutre = () => {
+            const val = document.getElementById('filiere').value;
+            const container = document.getElementById('autreFiliereContainer');
+            container.style.display = (val === "AUTRE") ? "block" : "none";
+        };
+
+        function sanitize(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // ENGINE : CLOUDINARY UPLOAD
+        async function uploadFile(file, onProgress) {
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("upload_preset", UPLOAD_PRESET);
+
+            // Simulation de progression car Fetch ne supporte pas nativement le suivi d'upload
+            onProgress(30); 
+
+            const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUD_NAME}/upload`, {
+                method: "POST",
+                body: formData
+            });
+
+            if (!response.ok) throw new Error("Erreur lors du transfert Cloud");
+            
+            onProgress(100);
+            const data = await response.json();
+            return data.secure_url;
+        }
+
+        const form = document.getElementById('uploadForm');
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const btn = document.getElementById('submitBtn');
+            const msg = document.getElementById('statusMessage');
+            const pBox = document.getElementById('progBox');
+            const pBar = document.getElementById('pBar');
+
+            const fileE = document.getElementById('fileEpreuve').files[0];
+            const fileC = document.getElementById('fileCorrige').files[0];
+            
+            let finalFiliere = document.getElementById('filiere').value;
+            if(finalFiliere === "AUTRE") {
+                finalFiliere = document.getElementById('filiereAutre').value.trim();
+                if(!finalFiliere) { alert("Veuillez saisir le nom de la filière"); return; }
+            }
+
+            btn.disabled = true;
+            pBox.style.display = 'block';
+            pBar.style.width = '10%';
+            msg.innerHTML = "Connexion au Cloud sécurisé...";
+
+            try {
+                // 1. UPLOAD EPREUVE
+                msg.innerHTML = "Envoi de l'épreuve...";
+                const urlE = await uploadFile(fileE, (p) => pBar.style.width = p + '%');
+
+                // 2. UPLOAD CORRIGE
+                let urlC = "";
+                if(fileC) {
+                    msg.innerHTML = "Envoi du corrigé...";
+                    pBar.style.width = '20%';
+                    urlC = await uploadFile(fileC, (p) => pBar.style.width = p + '%');
+                }
+
+                // 3. FIRESTORE SYNC
+                msg.innerHTML = "Finalisation de la publication...";
+                await addDoc(collection(db, "epreuves"), {
+                    ecole: document.getElementById('ecole').value,
+                    filiere: sanitize(finalFiliere),
+                    niveau: document.getElementById('niveau').value,
+                    annee: document.getElementById('annee').value,
+                    matiere: sanitize(document.getElementById('matiere').value),
+                    epreuve_url: urlE,
+                    corrige_url: urlC,
+                    date_ajout: serverTimestamp()
+                });
+
+                msg.className = "success";
+                msg.innerHTML = "✅ Déploiement réussi ! L'épreuve est accessible partout.";
+                form.reset();
+                setTimeout(() => { 
+                    pBox.style.display = 'none'; 
+                    document.getElementById('autreFiliereContainer').style.display = 'none';
+                }, 2000);
+
+            } catch (err) {
+                console.error(err);
+                msg.className = "error";
+                msg.innerHTML = "❌ Erreur Cloud : " + err.message;
+            } finally {
+                btn.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
