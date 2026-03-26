@@ -20,6 +20,24 @@
         body { font-family: 'Poppins', sans-serif; color: var(--dark); line-height: 1.7; scroll-behavior: smooth; background-color: var(--white); overflow-x: hidden; }
         .container { width: 90%; max-width: 1200px; margin: 0 auto; }
 
+        /* --- ANIMATIONS EN BOUCLE (KEYFRAMES) --- */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes scrollLogos {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(28, 158, 41, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(28, 158, 41, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(28, 158, 41, 0); }
+        }
+
         /* HEADER & NAV */
         header { background: rgba(255, 255, 255, 0.95); padding: 15px 0; position: sticky; top: 0; z-index: 1000; backdrop-filter: blur(10px); border-bottom: 1px solid #eee; }
         .nav-flex { display: flex; justify-content: space-between; align-items: center; }
@@ -36,20 +54,22 @@
             background: var(--primary); color: var(--white); padding: 16px 35px; border-radius: 12px;
             text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 10px;
             transition: var(--transition); border: none; box-shadow: 0 10px 20px rgba(28, 158, 41, 0.2); cursor: pointer;
+            animation: pulse-green 2s infinite; /* Boucle sur le bouton */
         }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(28, 158, 41, 0.3); background: #158020; }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 15px 25px rgba(28, 158, 41, 0.3); background: #158020; animation: none; }
 
         /* HERO SECTION */
         .hero { padding: 80px 0 60px; background: radial-gradient(circle at top right, #f0fdf4, #ffffff); }
         .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
         .hero-content h1 { font-size: 3.5rem; line-height: 1.1; color: var(--secondary); margin-bottom: 25px; font-weight: 800; }
         .hero-content p { font-size: 1.2rem; color: #4b5563; margin-bottom: 35px; border-left: 4px solid var(--primary); padding-left: 20px; }
+        .hero-image img { animation: float 4s ease-in-out infinite; } /* Boucle sur l'image */
 
-        /* SECTION SCHOOLS (NOUVEAU) */
-        .schools { padding: 60px 0; background: var(--white); border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
-        .school-slider { display: flex; gap: 40px; justify-content: center; align-items: center; flex-wrap: wrap; opacity: 0.6; }
-        .school-logo { height: 60px; filter: grayscale(100%); transition: 0.3s; }
-        .school-logo:hover { filter: grayscale(0%); opacity: 1; transform: scale(1.1); }
+        /* SECTION SCHOOLS (Défilement Infini) */
+        .schools { padding: 40px 0; background: var(--white); border-top: 1px solid #eee; border-bottom: 1px solid #eee; overflow: hidden; white-space: nowrap; }
+        .school-track { display: flex; width: calc(250px * 18); animation: scrollLogos 30s linear infinite; }
+        .school-logo { height: 60px; width: 250px; object-fit: contain; filter: grayscale(100%); transition: 0.3s; padding: 0 30px; }
+        .school-logo:hover { filter: grayscale(0%); transform: scale(1.1); }
 
         /* HOW IT WORKS */
         .how-it-works { padding: 100px 0; background: #fafafa; }
@@ -63,7 +83,7 @@
         .step-card h3 { font-size: 1.3rem; margin-bottom: 15px; color: var(--secondary); position: relative; z-index: 2; }
         .step-card p { color: #6b7280; font-size: 0.95rem; position: relative; z-index: 2; }
 
-        /* SECTION TÉMOIGNAGES (NOUVEAU) */
+        /* TESTIMONIALS */
         .testimonials { padding: 100px 0; background: var(--white); }
         .testi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 50px; }
         .testi-card { background: var(--light); padding: 30px; border-radius: 15px; border: 1px solid #eee; position: relative; transition: 0.3s; }
@@ -80,7 +100,7 @@
         .star-rating { font-size: 1.5rem; color: #ddd; cursor: pointer; margin-bottom: 15px; display: inline-flex; gap: 5px; }
         .star-rating i:hover, .star-rating i.active { color: #ffc107; }
 
-        /* CONTACT SECTION (Inchangée) */
+        /* CONTACT SECTION */
         .contact { padding: 100px 0; background: #fafafa; }
         .contact-container { display: grid; grid-template-columns: 1fr 1.2fr; gap: 0; background: var(--secondary); border-radius: 30px; overflow: hidden; box-shadow: var(--shadow); }
         .contact-info { padding: 60px; background: linear-gradient(135deg, var(--secondary) 0%, #0d0d4d 100%); color: var(--white); }
@@ -136,20 +156,28 @@
         </div>
     </section>
     
-    
     <section class="schools">
-           <div class="container school-slider">
-            <img src="images/logo_enstp.png" alt="ENSTP" class="school-logo" title="ENSTP Abomey">
-            <img src="images/logo_insti.png" alt="INSTI" class="school-logo" title="INSTI Lokossa">
-            <img src="images/logo_enset.png" alt="ENSET" class="school-logo" title="ENSET Lokossa">
-            <img src="images/logo_ens.png" alt="ENS" class="school-logo" title="ENS Natitingou">
-            <img src="images/logo_fast.png" alt="FAST" class="school-logo" title="FAST Natitingou">
-            <img src="images/logo_inspei.png" alt="INSPEI" class="school-logo" title="INSPEI Abomey">
-            <img src="images/logo_ensgmm.png" alt="ENSGMM" class="school-logo" title="ENSGMM Abomey">
-            <img src="images/logo_ensgep.png" alt="ENSGEP" class="school-logo" title="ENSGEP Abomey">
-            <img src="images/logo_ensbba.png" alt="ENSBBA" class="school-logo" title="ENSBBA Dassa">
-            </div>
-    </section>    
+        <div class="school-track">
+            <img src="images/logo_enstp.png" alt="ENSTP" class="school-logo">
+            <img src="images/logo_insti.png" alt="INSTI" class="school-logo">
+            <img src="images/logo_enset.png" alt="ENSET" class="school-logo">
+            <img src="images/logo_ens.png" alt="ENS" class="school-logo">
+            <img src="images/logo_fast.png" alt="FAST" class="school-logo">
+            <img src="images/logo_inspei.png" alt="INSPEI" class="school-logo">
+            <img src="images/logo_ensgmm.png" alt="ENSGMM" class="school-logo">
+            <img src="images/logo_ensgep.png" alt="ENSGEP" class="school-logo">
+            <img src="images/logo_ensbba.png" alt="ENSBBA" class="school-logo">
+            <img src="images/logo_enstp.png" alt="ENSTP" class="school-logo">
+            <img src="images/logo_insti.png" alt="INSTI" class="school-logo">
+            <img src="images/logo_enset.png" alt="ENSET" class="school-logo">
+            <img src="images/logo_ens.png" alt="ENS" class="school-logo">
+            <img src="images/logo_fast.png" alt="FAST" class="school-logo">
+            <img src="images/logo_inspei.png" alt="INSPEI" class="school-logo">
+            <img src="images/logo_ensgmm.png" alt="ENSGMM" class="school-logo">
+            <img src="images/logo_ensgep.png" alt="ENSGEP" class="school-logo">
+            <img src="images/logo_ensbba.png" alt="ENSBBA" class="school-logo">
+        </div>
+    </section> 
     
     <section class="how-it-works" id="how">
         <div class="container">
@@ -247,18 +275,15 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // -- UTILITAIRES SÉCURITÉ --
         function sanitize(text) {
             const temp = document.createElement('div');
             temp.textContent = text;
             return temp.innerHTML;
         }
 
-        // --- PARTIE 1 : AFFICHAGE DYNAMIQUE DES AVIS (Nouveau) ---
         async function loadTestimonials() {
             const container = document.getElementById('testiContainer');
             try {
-                // Requête : Prendre les 3 derniers témoignages dont le statut est "valide"
                 const q = query(
                     collection(db, "temoignages"), 
                     where("statut", "==", "valide"), 
@@ -267,7 +292,7 @@
                 );
                 const snap = await getDocs(q);
                 
-                container.innerHTML = ""; // Vider le spinner
+                container.innerHTML = "";
 
                 if (snap.empty) {
                     container.innerHTML = "<div style='grid-column:1/-1; text-align:center; color:#9ca3af;'>Aucun avis publié pour le moment. Soyez le premier !</div>";
@@ -277,8 +302,6 @@
                 snap.forEach((doc) => {
                     const data = doc.data();
                     const initials = data.nom.substring(0, 2);
-                    
-                    // Génération des étoiles
                     let starsHtml = "";
                     for(let i=0; i<5; i++) {
                         starsHtml += `<i class="fas fa-star" style="color: ${i < data.note ? '#ffc107' : '#ddd'}"></i>`;
@@ -304,18 +327,14 @@
                 container.innerHTML = "<div style='grid-column:1/-1; text-align:center; color:red;'>Erreur technique lors du chargement des avis.</div>";
             }
         }
-        // Charger au lancement de la page
         loadTestimonials();
 
-
-        // --- PARTIE 2 : SOUMISSION D'UN NOUVEL AVIS (Nouveau) ---
         let currentRating = 0;
         const stars = document.querySelectorAll('#starRating i');
         const reviewForm = document.getElementById('reviewForm');
         const reviewStatus = document.getElementById('reviewStatus');
         const submitReviewBtn = document.getElementById('submitReviewBtn');
 
-        // Gestion du clic sur les étoiles
         stars.forEach(star => {
             star.addEventListener('click', () => {
                 currentRating = star.getAttribute('data-rating');
@@ -340,12 +359,11 @@
             submitReviewBtn.innerText = "Envoi en cours...";
 
             try {
-                // IMPORTANT : On envoie avec statut "en_attente" pour modération
                 await addDoc(collection(db, "temoignages"), {
                     nom: name,
                     message: message,
                     note: parseInt(currentRating),
-                    statut: "en_attente", // <--- Sécurité modération
+                    statut: "en_attente",
                     date: serverTimestamp()
                 });
 
@@ -362,8 +380,6 @@
             }
         });
 
-
-        // --- PARTIE 3 : FORMULAIRE CONTACT (Inchangé) ---
         const contactForm = document.getElementById('secureContactForm');
         const status = document.getElementById('formStatus');
         const btn = document.getElementById('submitBtn');
