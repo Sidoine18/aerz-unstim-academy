@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bibliothèque UNSTIM | AEZ Academy</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #1c9e29; --secondary: #191970; --accent: #c41e3a;
+            --light: #f4f7f6; --white: #ffffff; --dark: #212529;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background-color: var(--light); color: var(--dark); overflow-x: hidden; scroll-behavior: smooth; }
+
+        header { 
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); padding: 15px 5%; 
+            display: flex; justify-content: space-between; align-items: center; 
+            box-shadow: 0 2px 15px rgba(0,0,0,0.08); border-bottom: 3px solid var(--primary);
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .logo-area { display: flex; align-items: center; gap: 12px; text-decoration: none; }
+        .logo-area img { height: 45px; }
+        .logo-text { font-weight: 800; color: var(--secondary); font-size: 1.3rem; }
+        .logo-text span { color: var(--accent); }
+
+        .btn-admin-link {
+            background: var(--secondary); color: white; border: none;
+            padding: 10px 22px; border-radius: 12px; font-size: 0.85rem;
+            font-weight: 600; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
+            cursor: pointer; display: flex; align-items: center; gap: 8px;
+        }
+        .btn-admin-link:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(25, 25, 112, 0.3); }
+        .btn-admin-link.logged-in { background: var(--primary); }
+
+        .hero-filter { background: var(--secondary); padding: 40px 5% 60px; color: white; text-align: center; }
+        .hero-filter h1 { margin-bottom: 25px; font-size: 2rem; font-weight: 700; }
+        
+        .search-container {
+            max-width: 800px; margin: 0 auto 25px; position: relative;
+        }
+        .search-bar {
+            width: 100%; padding: 18px 25px 18px 55px; border-radius: 50px;
+            border: none; font-size: 1.1rem; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            outline: none; transition: 0.3s;
+        }
+        .search-bar:focus { box-shadow: 0 10px 30px rgba(28, 158, 41, 0.3); transform: scale(1.01); }
+        .search-icon { position: absolute; left: 22px; top: 50%; transform: translateY(-50%); color: var(--secondary); font-size: 1.2rem; }
+
+        .filter-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); 
+            gap: 12px; max-width: 1100px; margin: 0 auto; 
+        }
+
+        select { 
+            width: 100%; padding: 12px; border-radius: 10px; border: none; 
+            outline: none; font-size: 0.9rem; background: var(--white);
+            cursor: pointer; transition: 0.3s;
+        }
+
+        .main-content { padding: 40px 5%; max-width: 1250px; margin: 0 auto; min-height: 60vh; }
+        .results-header { 
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 30px; padding-bottom: 15px; border-bottom: 2px solid #e2e8f0;
+        }
+        .results-count { font-weight: 700; color: var(--secondary); font-size: 1.1rem; }
+
+        #listeEpreuves { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 25px; }
+        
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(20px); transition: 0.5s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        .card-epreuve { 
+            background: var(--white); border-radius: 18px; overflow: hidden;
+            display: flex; flex-direction: column; box-shadow: 0 5px 15px rgba(0,0,0,0.03);
+            border: 1px solid rgba(0,0,0,0.05); transition: 0.3s ease;
+        }
+        .card-epreuve:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.1); }
+        
+        .card-body { padding: 22px; flex-grow: 1; }
+        .card-school { font-size: 0.7rem; font-weight: 800; color: var(--primary); letter-spacing: 1px; margin-bottom: 5px; text-transform: uppercase; }
+        .card-title { font-size: 1.1rem; color: var(--secondary); font-weight: 700; margin-bottom: 15px; line-height: 1.3; }
+        
+        .card-meta { display: flex; flex-wrap: wrap; gap: 6px; }
+        .meta-tag { background: #f1f5f9; padding: 4px 10px; border-radius: 6px; font-size: 0.7rem; color: #475569; font-weight: 600; }
+
+        .card-footer { background: #f8fafc; padding: 15px; display: flex; gap: 8px; border-top: 1px solid #f1f5f9; }
+        .btn-action { 
+            flex: 1; text-align: center; text-decoration: none; padding: 10px; border-radius: 8px; 
+            font-size: 0.8rem; font-weight: 700; transition: 0.2s; display: flex; align-items: center; justify-content: center; gap: 5px;
+        }
+        .btn-view { background: var(--secondary); color: white; }
+        .btn-soluce { background: var(--accent); color: white; }
+
+        .empty-state { grid-column: 1/-1; text-align: center; padding: 60px; color: #94a3b8; }
+        .empty-state i { font-size: 3rem; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo-area">
+            <img src="images/logo_aerza.png" alt="AERZA">
+            <div class="logo-text"><span>A</span>ERZA Academy</div>
+        </a>
+        <button id="adminBtn" class="btn-admin-link">
+            <i class="fas fa-lock"></i> Chargement...
+        </button>
+    </header>
+
+    <section class="hero-filter">
+        <div class="container">
+            <h1>Rechercher une ressource</h1>
+            
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="mainSearch" class="search-bar" placeholder="Ex: Thermodynamique, Mathématiques, L1..." oninput="logic_filtrer()">
+            </div>
+
+            <div class="filter-grid">
+                <select id="f-ecole" onchange="logic_updateFiliere(); logic_filtrer()">
+                    <option value="">🏫 Toutes les Écoles</option>
+                    <option value="ENSTP">ENSTP (Abomey)</option>
+                    <option value="ENSGEP">ENSGEP (Abomey)</option>
+                    <option value="ENSGMM">ENSGMM (Abomey)</option>
+                    <option value="INSPEI">INSPEI (Abomey)</option>
+                    <option value="INSTI">INSTI (Lokossa)</option>
+                    <option value="ENSET">ENSET (Lokossa)</option>
+                    <option value="ENS">ENS (Natitingou)</option>
+                    <option value="FAST">FAST (Natitingou)</option>
+                    <option value="ENSBBA">ENSBBA (Dassa)</option>
+                </select>
+
+                <select id="f-filiere" onchange="logic_filtrer()">
+                    <option value="">📚 Toutes les Filières</option>
+                </select>
+
+                <select id="f-niveau" onchange="logic_filtrer()">
+                    <option value="">🎓 Tous Niveaux</option>
+                    <option value="L1">Licence 1</option>
+                    <option value="L2">Licence 2</option>
+                    <option value="L3">Licence 3</option>
+                    <option value="Ing1">Ingénieur 1</option>
+                    <option value="Ing2">Ingénieur 2</option>
+                    <option value="Ing3">Ingénieur 3</option>
+                </select>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-content">
+        <div class="results-header">
+            <div class="results-count" id="txt-count">Chargement des documents...</div>
+        </div>
+        <div id="listeEpreuves"></div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, query, where, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA4NS-Lb0LLn0XXkwtbEKC0IQPtUeof9cs",
+            authDomain: "univzou-site.firebaseapp.com",
+            projectId: "univzou-site"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+
+        // --- GESTION DU BOUTON ADMIN ---
+        const adminBtn = document.getElementById('adminBtn');
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                adminBtn.innerHTML = '<i class="fas fa-plus-circle"></i> Ajouter une épreuve';
+                adminBtn.classList.add('logged-in');
+                adminBtn.onclick = () => window.location.href = 'upload.html';
+            } else {
+                adminBtn.innerHTML = '<i class="fas fa-user-shield"></i> Connexion Responsable';
+                adminBtn.classList.remove('logged-in');
+                adminBtn.onclick = () => window.location.href = 'login.html';
+            }
+        });
+
+        const UNSTIM_DATA = {
+            "ENSTP": ["Génie Civil", "Travaux Publics", "Géotechnique", "Architecture et Urbanisme", "Hydraulique et Assainissement", "Génie Géomatique Appliquée"],
+            "ENSGEP": ["Génie énergétique et Procédés", "Froid et climatisation", "Equipements motorisés"],
+            "ENSGMM": ["Mathématiques appliquées", "Modélisation", "Statistiques / Data"],
+            "INSPEI": ["Sciences et Techniques de l’Ingénieur"],
+            "INSTI": ["Génie Mécanique et productique", "Maintenance des Systèmes (Maintenance Automobile)", "Maintenance des Systèmes (Maintenance Industrielle)", "Génie Electrique et Informatique (Electronique et Electrotechnique)", "Génie Electrique et Informatique (Informatique et Télécommunications)", "Génie Energétique (Froid et climatisation)", "Génie Energétique (Energies Renouvelables et Systèmes Energétiques)", "Génie Civile"],
+            "ENSET": ["Production végétale", "Production Animale", "Energies Renouvelables", "Électronique", "Froid et Climatisation", "Hôtellerie-Restauration", "Économie Familiale et Sociale", "Fabrication Mécanique", "Mécanique Automobile", "Secrétariat", "Génie Civil", "Electrotechnique", "Économie", "Comptabilité"],
+            "ENS": ["Mathématiques et Informatique (MI)", "Physique, Chimie et Technologie (PCT)", "Sciences de la Vie et de la Terre (SVT)"],
+            "FAST": ["Mathématiques Informatiques", "Physique Chimie"],
+            "ENSBBA": ["Diététique des aliments et Nutrition", "Génie Biologique et Bioprocédés (GBB)", "Génétique Biotechnologies et Applications", "Biotechnologie Pharmaceutique", "Biotechnologie Médicale"]
+        };
+
+        window.logic_updateFiliere = function() {
+            const ecole = document.getElementById('f-ecole').value;
+            const filiereSelect = document.getElementById('f-filiere');
+            filiereSelect.innerHTML = '<option value="">📚 Toutes les Filières</option>';
+            if(UNSTIM_DATA[ecole]) {
+                UNSTIM_DATA[ecole].forEach(f => {
+                    let opt = document.createElement('option');
+                    opt.value = f; opt.innerText = f;
+                    filiereSelect.add(opt);
+                });
+            }
+        }
+
+        // --- OBSERVER POUR L'ANIMATION ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('active'); });
+        }, { threshold: 0.1 });
+
+        window.logic_filtrer = async function() {
+            const container = document.getElementById('listeEpreuves');
+            const txtCount = document.getElementById('txt-count');
+            const searchQuery = document.getElementById('mainSearch').value.toLowerCase();
+            const ecole = document.getElementById('f-ecole').value;
+            const filiere = document.getElementById('f-filiere').value;
+            const niveau = document.getElementById('f-niveau').value;
+
+            try {
+                let q = collection(db, "epreuves");
+                let conditions = [];
+                if (ecole) conditions.push(where("ecole", "==", ecole));
+                if (filiere) conditions.push(where("filiere", "==", filiere));
+                if (niveau) conditions.push(where("niveau", "==", niveau));
+
+                let finalQuery = conditions.length > 0 ? query(q, ...conditions) : query(q, orderBy("date_ajout", "desc"));
+                const snap = await getDocs(finalQuery);
+                
+                container.innerHTML = "";
+                let count = 0;
+
+                snap.forEach((doc) => {
+                    const d = doc.data();
+                    // Filtre local pour la barre de recherche (Matière ou Année)
+                    if (searchQuery && !d.matiere.toLowerCase().includes(searchQuery) && !d.annee.toString().includes(searchQuery)) {
+                        return;
+                    }
+
+                    count++;
+                    const card = document.createElement('div');
+                    card.className = 'card-epreuve reveal';
+                    card.innerHTML = `
+                        <div class="card-body">
+                            <div class="card-school">${d.ecole}</div>
+                            <h3 class="card-title">${d.matiere}</h3>
+                            <div class="card-meta">
+                                <span class="meta-tag"><i class="fas fa-graduation-cap"></i> ${d.niveau}</span>
+                                <span class="meta-tag"><i class="fas fa-book"></i> ${d.filiere}</span>
+                                <span class="meta-tag"><i class="far fa-calendar-alt"></i> ${d.annee}</span>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="${d.epreuve_url}" target="_blank" class="btn-action btn-view"><i class="fas fa-file-pdf"></i> Voir</a>
+                            ${d.corrige_url ? `<a href="${d.corrige_url}" target="_blank" class="btn-action btn-soluce"><i class="fas fa-check"></i> Corrigé</a>` : ''}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                    observer.observe(card);
+                });
+
+                txtCount.innerText = `${count} document(s) trouvé(s)`;
+                if (count === 0) container.innerHTML = '<div class="empty-state"><i class="fas fa-search"></i><p>Aucun résultat.</p></div>';
+
+            } catch (err) {
+                console.error(err);
+                txtCount.innerText = "Erreur de chargement";
+            }
+        }
+
+        window.onload = logic_filtrer;
+    </script>
+</body>
+</html>
